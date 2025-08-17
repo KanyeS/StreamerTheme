@@ -19,7 +19,9 @@ interface TwitchUserTokenInfo {
 
 class TwitchUserOAuthService {
   private baseUrl = 'https://id.twitch.tv/oauth2'
-  private redirectUri = 'https://localhost:3000' // Fixed redirect URI
+  private redirectUri = import.meta.env.DEV 
+    ? 'https://localhost:3000' 
+    : 'https://streamertheme.vercel.app'
   
   /**
    * Required scopes for full broadcaster access
