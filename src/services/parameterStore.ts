@@ -1,5 +1,6 @@
 import { SSMClient, GetParameterCommand, GetParametersCommand } from '@aws-sdk/client-ssm'
 import config from '../config'
+import { serverlessTwitchAuth } from './serverlessTwitchAuth'
 
 // AWS Parameter Store service
 class ParameterStoreService {
@@ -8,6 +9,13 @@ class ParameterStoreService {
 
   constructor(region: string = config.aws.region) {
     try {
+      // Check if we should use serverless mode
+      if (config.development.useServerlessMode) {
+        console.log('Using serverless mode for Twitch credentials')
+        this.isConfigured = true
+        return
+      }
+
       // Check if we're in a browser environment
       const isBrowser = typeof window !== 'undefined'
       
@@ -95,6 +103,25 @@ class ParameterStoreService {
     clientId: string | null
     clientSecret: string | null
   }> {
+    // Use serverless mode if enabled
+    if (config.development.useServerlessMode) {
+      console.log('Getting Twitch credentials via serverless function')
+      const credentials = await serverlessTwitchAuth.getTwitchCredentials()
+      
+      if (credentials) {
+        return {
+          clientId: credentials.client_id,
+          clientSecret: null // We don't need the secret in the frontend
+        }
+      } else {
+        console.warn('Failed to get credentials from serverless function')
+        return {
+          clientId: null,
+          clientSecret: null
+        }
+      }
+    }
+
     if (!this.isConfigured) {
       console.warn('AWS Parameter Store not configured - returning null credentials (demo mode)')
       return {

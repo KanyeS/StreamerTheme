@@ -1,5 +1,7 @@
 import axios from 'axios'
 import { parameterStore } from './parameterStore'
+import { serverlessTwitchAuth } from './serverlessTwitchAuth'
+import config from '../config'
 
 interface TwitchOAuthResponse {
   access_token: string
@@ -26,6 +28,21 @@ class TwitchOAuthService {
    */
   async generateAppAccessToken(): Promise<string | null> {
     try {
+      // If using serverless mode, get the token directly from the serverless function
+      if (config.development.useServerlessMode) {
+        console.log('Getting access token from serverless function')
+        const credentials = await serverlessTwitchAuth.getTwitchCredentials()
+        
+        if (credentials?.access_token) {
+          console.log('Received access token from serverless function')
+          return credentials.access_token
+        } else {
+          console.error('Failed to get access token from serverless function')
+          return null
+        }
+      }
+
+      // Traditional Parameter Store approach
       const credentials = await parameterStore.getTwitchCredentials()
       
       if (!credentials.clientId || !credentials.clientSecret) {
