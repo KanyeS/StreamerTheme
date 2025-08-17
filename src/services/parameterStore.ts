@@ -41,7 +41,7 @@ class ParameterStoreService {
           clientSecret: null // We don't need the secret in the frontend
         }
       } else {
-        console.warn('Failed to get credentials from serverless function')
+        console.warn('Failed to get credentials from serverless function - falling back to demo mode')
         return {
           clientId: null,
           clientSecret: null
@@ -50,7 +50,7 @@ class ParameterStoreService {
     }
 
     // Fallback mode (demo mode)
-    console.warn('Parameter Store not configured - returning null credentials (demo mode)')
+    console.log('Using demo mode for development')
     return {
       clientId: null,
       clientSecret: null

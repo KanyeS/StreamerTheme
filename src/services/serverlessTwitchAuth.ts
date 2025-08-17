@@ -13,7 +13,7 @@ class ServerlessTwitchAuth {
 
   constructor() {
     // In development, use localhost. In production, Vercel will handle this automatically
-    this.baseUrl = process.env.NODE_ENV === 'development' 
+    this.baseUrl = import.meta.env.DEV 
       ? 'http://localhost:3000' 
       : ''
   }
@@ -39,7 +39,12 @@ class ServerlessTwitchAuth {
       const credentials = await response.json()
       return credentials
     } catch (error) {
-      console.error('Error calling twitch-auth function:', error)
+      // In development mode, this is expected to fail when using regular vite dev server
+      if (import.meta.env.DEV) {
+        console.info('Serverless function not available in local development (this is expected with vite dev server)')
+      } else {
+        console.error('Error calling twitch-auth function:', error)
+      }
       return null
     }
   }

@@ -48,10 +48,10 @@ export const config = {
   
   // Development mode settings
   development: {
-    // Set to true to use demo data instead of trying to connect to AWS
-    useDemoMode: false,
-    // Set to true to use serverless functions instead of direct AWS calls
-    useServerlessMode: true,
+    // Automatically use demo mode for local development, serverless for production
+    useDemoMode: import.meta.env.DEV, // true for local dev, false for production
+    // Set to true to use serverless functions instead of direct AWS calls (production only)
+    useServerlessMode: !import.meta.env.DEV, // false for local dev, true for production
     demoData: {
       viewers: 42,
       followers: 1337,
