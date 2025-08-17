@@ -1,5 +1,3 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
-
 // CORS headers for frontend requests
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -7,10 +5,13 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'Content-Type',
 };
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+module.exports = async function handler(req, res) {
   // Handle CORS preflight
   if (req.method === 'OPTIONS') {
-    return res.status(200).json({});
+    return res.status(200).setHeader('Access-Control-Allow-Origin', '*')
+                          .setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+                          .setHeader('Access-Control-Allow-Headers', 'Content-Type')
+                          .json({});
   }
 
   try {
@@ -42,16 +43,22 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const tokenData = await tokenResponse.json();
 
     // Return the access token to the frontend
-    res.status(200).json({
-      access_token: tokenData.access_token,
-      client_id: clientId,
-    });
+    res.status(200).setHeader('Access-Control-Allow-Origin', '*')
+                   .setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+                   .setHeader('Access-Control-Allow-Headers', 'Content-Type')
+                   .json({
+                     access_token: tokenData.access_token,
+                     client_id: clientId,
+                   });
 
   } catch (error) {
     console.error('Error in twitch-auth function:', error);
-    res.status(500).json({
-      error: 'Failed to get Twitch credentials',
-      message: error instanceof Error ? error.message : 'Unknown error',
-    });
+    res.status(500).setHeader('Access-Control-Allow-Origin', '*')
+                   .setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+                   .setHeader('Access-Control-Allow-Headers', 'Content-Type')
+                   .json({
+                     error: 'Failed to get Twitch credentials',
+                     message: error instanceof Error ? error.message : 'Unknown error',
+                   });
   }
 }
