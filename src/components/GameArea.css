@@ -1,0 +1,187 @@
+.game-area-container {
+  position: absolute;
+  top: 100px;
+  left: 50px;
+  z-index: 15;
+  pointer-events: auto;
+}
+
+.game-area {
+  position: relative;
+  width: 1300px; /* 10% bigger than 800px */
+  height: 700px; /* 10% bigger than 450px */
+  /* Ghibli Meadow - inspired by Kiki's Delivery Service */
+  background: linear-gradient(
+    120deg,
+    rgba(135, 206, 235, 0.9) 0%,   /* Sky blue */
+    rgba(240, 230, 140, 0.85) 25%, /* Khaki */
+    rgba(255, 218, 185, 0.9) 45%,  /* Peach puff */
+    rgba(255, 192, 203, 0.85) 65%, /* Pink */
+    rgba(221, 160, 221, 0.9) 85%,  /* Plum */
+    rgba(176, 196, 222, 0.95) 100% /* Light steel blue */
+  );
+  background-size: 400% 400%;
+  animation: ghibliMeadow 9s ease-in-out infinite;
+  border-radius: 24px;
+  box-shadow: 
+    0 20px 60px rgba(135, 206, 235, 0.4),
+    0 10px 30px rgba(0, 0, 0, 0.2),
+    inset 0 2px 8px rgba(255, 255, 255, 0.3);
+  overflow: hidden;
+  border: 3px solid rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
+}
+
+@keyframes ghibliMeadow {
+  0% { 
+    background-position: 0% 0%;
+    filter: brightness(1) saturate(1) hue-rotate(0deg);
+  }
+  25% { 
+    background-position: 25% 50%;
+    filter: brightness(1.05) saturate(1.1) hue-rotate(5deg);
+  }
+  50% { 
+    background-position: 75% 100%;
+    filter: brightness(1.1) saturate(1.2) hue-rotate(10deg);
+  }
+  75% { 
+    background-position: 100% 25%;
+    filter: brightness(1.05) saturate(1.1) hue-rotate(5deg);
+  }
+  100% { 
+    background-position: 0% 0%;
+    filter: brightness(1) saturate(1) hue-rotate(0deg);
+  }
+}
+
+.game-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.game-placeholder {
+  text-align: center;
+  color: #4a4a4a;
+  font-family: 'Georgia', serif;
+  text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8);
+}
+
+.game-placeholder h2 {
+  font-size: 32px;
+  margin-bottom: 15px;
+  color: #2c3e50;
+  text-shadow: 3px 3px 6px rgba(255, 255, 255, 0.9);
+  font-weight: 300;
+  letter-spacing: 1px;
+}
+
+.game-placeholder p {
+  font-size: 18px;
+  color: #5a5a5a;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.7);
+}
+
+.game-info {
+  /* Ghibli Crystal - inspired by Castle in the Sky */
+  background: linear-gradient(
+    135deg,
+    rgba(255, 218, 185, 0.9) 0%,  /* Peach puff */
+    rgba(255, 192, 203, 0.85) 30%, /* Pink */
+    rgba(221, 160, 221, 0.9) 60%,  /* Plum */
+    rgba(176, 196, 222, 0.85) 100% /* Light steel blue */
+  );
+  background-size: 200% 200%;
+  animation: ghibliCrystal 5s ease-in-out infinite;
+  padding: 12px 24px;
+  border-radius: 30px;
+  color: #2c3e50;
+  font-weight: 600;
+  display: inline-block;
+  text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8);
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 
+    0 4px 20px rgba(255, 192, 203, 0.4),
+    inset 0 2px 4px rgba(255, 255, 255, 0.5);
+}
+
+@keyframes ghibliCrystal {
+  0%, 100% { 
+    background-position: 0% 50%;
+    box-shadow: 
+      0 4px 20px rgba(255, 192, 203, 0.4),
+      inset 0 2px 4px rgba(255, 255, 255, 0.5);
+  }
+  50% { 
+    background-position: 100% 50%;
+    box-shadow: 
+      0 6px 25px rgba(221, 160, 221, 0.6),
+      inset 0 2px 6px rgba(255, 255, 255, 0.7);
+  }
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Responsive design for the game area */
+@media (max-width: 1024px) {
+  .game-area {
+    width: 660px; /* 10% bigger than 600px */
+    height: 370px; /* 10% bigger than 337px */
+  }
+  
+  .game-placeholder h2 {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .game-area-container {
+    top: 10px;
+    left: 10px;
+  }
+  
+  .game-area {
+    width: 550px; /* 10% bigger than 500px */
+    height: 308px; /* 10% bigger than 280px */
+  }
+  
+  .game-placeholder h2 {
+    font-size: 20px;
+  }
+  
+  .game-placeholder p {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 640px) {
+  .game-area-container {
+    top: 10px;
+    left: 10px;
+    right: 10px;
+  }
+  
+  .game-area {
+    width: calc(100vw - 40px);
+    max-width: 500px;
+    height: 220px; /* 10% bigger than 200px */
+  }
+  
+  .game-placeholder h2 {
+    font-size: 18px;
+  }
+  
+  .game-placeholder p {
+    font-size: 12px;
+  }
+}

@@ -1,0 +1,241 @@
+.app-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  /* Ghibli Sky Gradient - inspired by Howl's Moving Castle */
+  background: linear-gradient(
+    135deg,
+    #87CEEB 0%,    /* Sky blue */
+    #98D8E8 15%,   /* Light blue */
+    #F0E68C 35%,   /* Soft yellow */
+    #FFB6C1 55%,   /* Light pink */
+    #DDA0DD 75%,   /* Plum */
+    #9370DB 100%   /* Medium slate blue */
+  );
+  background-size: 400% 400%;
+  animation: ghibliSkyFlow 12s ease-in-out infinite;
+}
+
+/* Ghibli-style sky animation - like clouds drifting */
+@keyframes ghibliSkyFlow {
+  0% { 
+    background-position: 0% 0%;
+    filter: hue-rotate(0deg) brightness(1);
+  }
+  25% { 
+    background-position: 50% 25%;
+    filter: hue-rotate(5deg) brightness(1.05);
+  }
+  50% { 
+    background-position: 100% 50%;
+    filter: hue-rotate(10deg) brightness(1.1);
+  }
+  75% { 
+    background-position: 50% 75%;
+    filter: hue-rotate(5deg) brightness(1.05);
+  }
+  100% { 
+    background-position: 0% 100%;
+    filter: hue-rotate(0deg) brightness(1);
+  }
+}
+
+.background-3d {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Ensure proper layering for overlays */
+.streamer-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Ghibli-style gradient animations */
+@keyframes ghibliShimmer {
+  0% { 
+    background-position: 0% 50%;
+    filter: brightness(1) saturate(1);
+  }
+  25% { 
+    background-position: 25% 25%;
+    filter: brightness(1.05) saturate(1.1);
+  }
+  50% { 
+    background-position: 100% 75%;
+    filter: brightness(1.1) saturate(1.2);
+  }
+  75% { 
+    background-position: 75% 25%;
+    filter: brightness(1.05) saturate(1.1);
+  }
+  100% { 
+    background-position: 0% 50%;
+    filter: brightness(1) saturate(1);
+  }
+}
+
+.twitch-chat {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 350px;
+  height: 650px;
+  z-index: 20;
+  /* Ghibli Forest Clearing - inspired by Totoro */
+  background: linear-gradient(
+    145deg,
+    rgba(152, 216, 232, 0.9) 0%,   /* Light sky blue */
+    rgba(175, 238, 238, 0.85) 20%, /* Pale turquoise */
+    rgba(255, 239, 213, 0.9) 40%,  /* Soft cream */
+    rgba(255, 182, 193, 0.85) 60%, /* Light pink */
+    rgba(221, 160, 221, 0.9) 80%,  /* Plum */
+    rgba(147, 112, 219, 0.95) 100% /* Medium slate blue */
+  );
+  background-size: 300% 300%;
+  animation: ghibliShimmer 8s ease-in-out infinite;
+  border-radius: 16px;
+  backdrop-filter: blur(15px);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 
+    0 8px 32px rgba(152, 216, 232, 0.3),
+    inset 0 2px 4px rgba(255, 255, 255, 0.2);
+  pointer-events: auto;
+}
+
+/* Chat animations - Ghibli style */
+.chat-message {
+  animation: ghibliSlideIn 0.6s ease-out;
+}
+
+@keyframes ghibliSlideIn {
+  0% {
+    transform: translateX(100%) scale(0.8);
+    opacity: 0;
+    filter: blur(2px);
+  }
+  60% {
+    transform: translateX(-5px) scale(1.02);
+    opacity: 0.8;
+    filter: blur(0px);
+  }
+  100% {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+    filter: blur(0px);
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .twitch-chat {
+    width: 300px;
+    height: 400px;
+    top: 10px;
+    right: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .twitch-chat {
+    width: calc(100vw - 20px);
+    height: 250px;
+    bottom: 10px;
+    top: auto;
+    right: 10px;
+    left: 10px;
+  }
+}
+
+/* Loading Screen - Ghibli Magic */
+.loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Ghibli Sunset - inspired by Castle in the Sky */
+  background: linear-gradient(
+    135deg,
+    #FFE4B5 0%,    /* Moccasin */
+    #FFCCCB 20%,   /* Light pink */
+    #FFB6C1 35%,   /* Light pink */
+    #DDA0DD 50%,   /* Plum */
+    #9370DB 65%,   /* Medium slate blue */
+    #4682B4 80%,   /* Steel blue */
+    #2F4F4F 100%   /* Dark slate gray */
+  );
+  background-size: 400% 400%;
+  animation: ghibliMagic 10s ease-in-out infinite;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
+  font-size: 18px;
+  z-index: 9999;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.loading-spinner {
+  font-size: 48px;
+  margin-bottom: 20px;
+  animation: ghibliSpin 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+}
+
+@keyframes ghibliMagic {
+  0% { 
+    background-position: 0% 0%;
+    filter: brightness(1) hue-rotate(0deg);
+  }
+  25% { 
+    background-position: 50% 50%;
+    filter: brightness(1.1) hue-rotate(10deg);
+  }
+  50% { 
+    background-position: 100% 100%;
+    filter: brightness(1.2) hue-rotate(20deg);
+  }
+  75% { 
+    background-position: 50% 50%;
+    filter: brightness(1.1) hue-rotate(10deg);
+  }
+  100% { 
+    background-position: 0% 0%;
+    filter: brightness(1) hue-rotate(0deg);
+  }
+}
+
+@keyframes ghibliSpin {
+  0% { 
+    transform: rotate(0deg) scale(1);
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+  }
+  25% { 
+    transform: rotate(90deg) scale(1.1);
+    filter: drop-shadow(0 0 20px rgba(255, 182, 193, 0.9));
+  }
+  50% { 
+    transform: rotate(180deg) scale(1.2);
+    filter: drop-shadow(0 0 30px rgba(221, 160, 221, 1));
+  }
+  75% { 
+    transform: rotate(270deg) scale(1.1);
+    filter: drop-shadow(0 0 20px rgba(147, 112, 219, 0.9));
+  }
+  100% { 
+    transform: rotate(360deg) scale(1);
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+  }
+}

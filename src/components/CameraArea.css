@@ -1,0 +1,177 @@
+.camera-area-container {
+  position: absolute;
+  bottom: 20px; /* Position at bottom corner */
+  right: 20px; /* Align with chat */
+  z-index: 15;
+  pointer-events: auto;
+}
+
+.camera-area {
+  position: relative;
+  width: 350px; /* Match chat width */
+  height: 200px; /* Smaller height for camera */
+  /* Ghibli Window - inspired by Howl's Moving Castle */
+  background: linear-gradient(
+    160deg,
+    rgba(176, 196, 222, 0.9) 0%,  /* Light steel blue */
+    rgba(221, 160, 221, 0.85) 25%, /* Plum */
+    rgba(255, 192, 203, 0.9) 50%,  /* Pink */
+    rgba(255, 218, 185, 0.85) 75%, /* Peach puff */
+    rgba(240, 230, 140, 0.9) 100%  /* Khaki */
+  );
+  background-size: 300% 300%;
+  animation: ghibliWindow 7s ease-in-out infinite;
+  border-radius: 20px;
+  box-shadow: 
+    0 8px 32px rgba(176, 196, 222, 0.4),
+    inset 0 2px 6px rgba(255, 255, 255, 0.4);
+  overflow: hidden;
+  border: 3px solid rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(12px);
+}
+
+@keyframes ghibliWindow {
+  0%, 100% { 
+    background-position: 0% 50%;
+    filter: brightness(1) saturate(1);
+    transform: scale(1);
+  }
+  25% { 
+    background-position: 25% 25%;
+    filter: brightness(1.05) saturate(1.1);
+    transform: scale(1.01);
+  }
+  50% { 
+    background-position: 50% 75%;
+    filter: brightness(1.1) saturate(1.15);
+    transform: scale(1.02);
+  }
+  75% { 
+    background-position: 75% 25%;
+    filter: brightness(1.05) saturate(1.1);
+    transform: scale(1.01);
+  }
+}
+
+.camera-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.camera-placeholder {
+  text-align: center;
+  color: #4a4a4a;
+  font-family: 'Georgia', serif;
+}
+
+.camera-placeholder h3 {
+  font-size: 22px;
+  margin-bottom: 10px;
+  color: #2c3e50;
+  text-shadow: 3px 3px 6px rgba(255, 255, 255, 0.9);
+  font-weight: 300;
+  letter-spacing: 0.5px;
+}
+
+.camera-placeholder p {
+  font-size: 15px;
+  color: #5a5a5a;
+  margin-bottom: 15px;
+  text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8);
+}
+
+.camera-info {
+  /* Ghibli Badge - inspired by Princess Mononoke */
+  background: linear-gradient(
+    135deg,
+    rgba(255, 218, 185, 0.9) 0%,  /* Peach puff */
+    rgba(255, 192, 203, 0.85) 50%, /* Pink */
+    rgba(221, 160, 221, 0.9) 100%  /* Plum */
+  );
+  backdrop-filter: blur(10px);
+  padding: 10px 18px;
+  border-radius: 25px;
+  color: #2c3e50;
+  font-weight: 600;
+  display: inline-block;
+  text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.9);
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  font-size: 13px;
+  animation: ghibliBadge 6s ease-in-out infinite;
+}
+
+@keyframes ghibliBadge {
+  0%, 100% { 
+    box-shadow: 0 2px 8px rgba(255, 192, 203, 0.4);
+    transform: scale(1);
+  }
+  50% { 
+    box-shadow: 0 4px 15px rgba(221, 160, 221, 0.6);
+    transform: scale(1.02);
+  }
+}
+
+/* Gradient animation keyframes */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Responsive design for the camera area */
+@media (max-width: 1200px) {
+  .camera-area {
+    width: 300px;
+    height: 170px;
+  }
+  
+  .camera-placeholder h3 {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 768px) {
+  .camera-area {
+    width: 280px;
+    height: 150px;
+  }
+  
+  .camera-placeholder h3 {
+    font-size: 16px;
+  }
+  
+  .camera-placeholder p {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .camera-area-container {
+    bottom: 80px; /* Position above bottom social bar on mobile */
+    right: 10px;
+    left: 10px;
+  }
+  
+  .camera-area {
+    width: calc(100vw - 40px);
+    height: 120px;
+  }
+  
+  .camera-placeholder h3 {
+    font-size: 14px;
+  }
+  
+  .camera-placeholder p {
+    font-size: 10px;
+  }
+  
+  .camera-info {
+    font-size: 10px;
+    padding: 6px 12px;
+  }
+}

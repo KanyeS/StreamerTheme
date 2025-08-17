@@ -1,0 +1,207 @@
+/* Add the gradient animation keyframes */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.twitch-login {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+  background-size: 200% 200%;
+  animation: gradientShift 3s ease infinite;
+  padding: 30px;
+  border-radius: 15px;
+  backdrop-filter: blur(15px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(255, 255, 255, 0.2);
+  z-index: 1000;
+  max-width: 500px;
+  width: 90%;
+  color: white;
+  text-align: center;
+}
+
+.twitch-login.logged-in {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  transform: none;
+  padding: 15px 20px;
+  max-width: 300px;
+  background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+  background-size: 200% 200%;
+  animation: gradientShift 3s ease infinite;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.login-prompt h3 {
+  color: #9146ff;
+  margin-bottom: 15px;
+  font-size: 24px;
+}
+
+.login-prompt p {
+  color: #ccc;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.permissions-info {
+  background: rgba(145, 70, 255, 0.1);
+  border: 1px solid #9146ff;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 20px 0;
+  text-align: left;
+}
+
+.permissions-info h4 {
+  color: #9146ff;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.permissions-info ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.permissions-info li {
+  color: #fff;
+  margin: 8px 0;
+  padding-left: 5px;
+}
+
+.login-btn {
+  background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+  background-size: 200% 200%;
+  animation: gradientShift 3s ease infinite;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 25px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: 10px 0;
+  width: 100%;
+  max-width: 250px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+}
+
+.skip-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ccc;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 12px 24px;
+  border-radius: 20px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: 5px 0 20px 0;
+  width: 100%;
+  max-width: 250px;
+}
+
+.login-btn:hover {
+  background: linear-gradient(45deg, #772ce8, #5c1f99);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(145, 70, 255, 0.4);
+}
+
+.skip-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.login-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.logout-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.login-status {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.status-indicator {
+  color: #4CAF50;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.permissions-note {
+  color: #ccc;
+  font-size: 12px;
+}
+
+.error-message {
+  background: rgba(255, 107, 107, 0.1);
+  border: 1px solid #ff6b6b;
+  color: #ff6b6b;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 15px 0;
+  font-size: 14px;
+}
+
+.fallback-note {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 15px;
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.fallback-note p {
+  margin: 0;
+  color: #aaa;
+  line-height: 1.4;
+}
+
+.fallback-note strong {
+  color: #fff;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .twitch-login {
+    padding: 20px;
+    max-width: 90%;
+  }
+  
+  .login-prompt h3 {
+    font-size: 20px;
+  }
+  
+  .login-btn {
+    font-size: 16px;
+    padding: 12px 24px;
+  }
+}
