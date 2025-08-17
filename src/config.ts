@@ -49,7 +49,7 @@ export const config = {
   // Development mode settings
   development: {
     // Set to true to use demo data instead of trying to connect to AWS
-    useDemoMode: false,
+    useDemoMode: true,
     demoData: {
       viewers: 42,
       followers: 1337,
