@@ -1,5 +1,4 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
-import { SSMClient, GetParameterCommand } from '@aws-sdk/client-ssm';
 
 // CORS headers for frontend requests
 const corsHeaders = {
@@ -15,32 +14,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    // Initialize AWS SSM client
-    const ssmClient = new SSMClient({
-      region: process.env.AWS_REGION || 'ap-southeast-2',
-      credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
-      },
-    });
-
-    // Get Twitch credentials from Parameter Store
-    const [clientIdParam, clientSecretParam] = await Promise.all([
-      ssmClient.send(new GetParameterCommand({
-        Name: '/twitch/client-id',
-        WithDecryption: true,
-      })),
-      ssmClient.send(new GetParameterCommand({
-        Name: '/twitch/client-secret',
-        WithDecryption: true,
-      })),
-    ]);
-
-    const clientId = clientIdParam.Parameter?.Value;
-    const clientSecret = clientSecretParam.Parameter?.Value;
+    // Get Twitch credentials from Vercel environment variables
+    const clientId = process.env.TWITCH_CLIENT_ID;
+    const clientSecret = process.env.TWITCH_CLIENT_SECRET;
 
     if (!clientId || !clientSecret) {
-      throw new Error('Missing Twitch credentials in Parameter Store');
+      throw new Error('Missing Twitch credentials in Vercel environment variables');
     }
 
     // Get OAuth token from Twitch
