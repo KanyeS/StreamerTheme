@@ -3,23 +3,12 @@ import { serverlessTwitchAuth } from './serverlessTwitchAuth'
 
 // Parameter Store service (now using serverless functions)
 class ParameterStoreService {
-  private isConfigured: boolean = false
-
   constructor() {
-    try {
-      // Check if we should use serverless mode
-      if (config.development.useServerlessMode) {
-        console.log('Using serverless mode for Twitch credentials')
-        this.isConfigured = true
-        return
-      }
-
-      // Legacy direct access mode (not recommended for production)
-      console.warn('Direct Parameter Store access mode - credentials would need to be in environment variables')
-      this.isConfigured = false
-    } catch (error) {
-      console.warn('Failed to initialize Parameter Store service:', error)
-      this.isConfigured = false
+    // Check if we should use serverless mode
+    if (config.development.useServerlessMode) {
+      console.log('Using serverless mode for Twitch credentials')
+    } else {
+      console.log('Using demo mode for development')
     }
   }
 
