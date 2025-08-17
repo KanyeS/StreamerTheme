@@ -3,6 +3,8 @@ import { parameterStore } from './parameterStore'
 import { serverlessTwitchUserAuth } from './serverlessTwitchUserAuth'
 import config from '../config'
 
+// Force rebuild - Updated Aug 17 2025 10:10PM
+
 interface TwitchUserOAuthResponse {
   access_token: string
   refresh_token: string
@@ -82,11 +84,20 @@ class TwitchUserOAuthService {
    */
   async exchangeCodeForToken(code: string): Promise<TwitchUserOAuthResponse | null> {
     try {
+      // Debug logging for environment detection
+      console.log('🔍 OAuth Environment Debug:', {
+        isDev: import.meta.env.DEV,
+        useServerlessMode: config.development.useServerlessMode,
+        useParameterStore: !config.development.useServerlessMode
+      })
+      
       // Use serverless mode in production, Parameter Store in development
       if (config.development.useServerlessMode) {
+        console.log('📡 Using serverless mode for token exchange')
         const tokenData = await serverlessTwitchUserAuth.exchangeCodeForToken(code, this.redirectUri)
         return tokenData
       } else {
+        console.log('🏗️ Using Parameter Store mode for token exchange')
         // Development mode - use Parameter Store
         const credentials = await parameterStore.getTwitchCredentials()
         
