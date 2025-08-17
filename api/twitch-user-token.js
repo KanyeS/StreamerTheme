@@ -23,56 +23,73 @@ module.exports = async function handler(req, res) {
       throw new Error('Missing Twitch credentials in Vercel environment variables');
     }
 
-    // If it's a GET request, just return client_id (for authorization URL generation)
-    if (req.method === 'GET') {
-      const { client_only } = req.query;
-      
-      if (client_only === 'true') {
-        return res.status(200).setHeader('Access-Control-Allow-Origin', '*')
-                              .setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-                              .setHeader('Access-Control-Allow-Headers', 'Content-Type')
-                              .json({
-                                client_id: clientId,
-                              });
-      }
+    const { code, refresh_token, redirect_uri, grant_type } = req.body;
+
+    if (!grant_type) {
+      throw new Error('Missing grant_type in request body');
     }
 
-    // Default behavior: Get OAuth token from Twitch
+    let requestBody;
+
+    if (grant_type === 'authorization_code') {
+      // Exchange authorization code for tokens
+      if (!code || !redirect_uri) {
+        throw new Error('Missing code or redirect_uri for authorization_code grant');
+      }
+
+      requestBody = new URLSearchParams({
+        client_id: clientId,
+        client_secret: clientSecret,
+        code: code,
+        grant_type: 'authorization_code',
+        redirect_uri: redirect_uri,
+      });
+    } else if (grant_type === 'refresh_token') {
+      // Refresh existing token
+      if (!refresh_token) {
+        throw new Error('Missing refresh_token for refresh_token grant');
+      }
+
+      requestBody = new URLSearchParams({
+        client_id: clientId,
+        client_secret: clientSecret,
+        refresh_token: refresh_token,
+        grant_type: 'refresh_token',
+      });
+    } else {
+      throw new Error(`Unsupported grant_type: ${grant_type}`);
+    }
+
+    // Make request to Twitch
     const tokenResponse = await fetch('https://id.twitch.tv/oauth2/token', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: new URLSearchParams({
-        client_id: clientId,
-        client_secret: clientSecret,
-        grant_type: 'client_credentials',
-      }),
+      body: requestBody,
     });
 
     if (!tokenResponse.ok) {
-      throw new Error(`Twitch API error: ${tokenResponse.status}`);
+      const errorData = await tokenResponse.text();
+      throw new Error(`Twitch API error: ${tokenResponse.status} - ${errorData}`);
     }
 
     const tokenData = await tokenResponse.json();
 
-    // Return the access token to the frontend
+    // Return the tokens to the frontend
     res.status(200).setHeader('Access-Control-Allow-Origin', '*')
                    .setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
                    .setHeader('Access-Control-Allow-Headers', 'Content-Type')
-                   .json({
-                     access_token: tokenData.access_token,
-                     client_id: clientId,
-                   });
+                   .json(tokenData);
 
   } catch (error) {
-    console.error('Error in twitch-auth function:', error);
+    console.error('Error in twitch-user-token function:', error);
     res.status(500).setHeader('Access-Control-Allow-Origin', '*')
                    .setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
                    .setHeader('Access-Control-Allow-Headers', 'Content-Type')
                    .json({
-                     error: 'Failed to get Twitch credentials',
+                     error: 'Failed to process Twitch user token request',
                      message: error instanceof Error ? error.message : 'Unknown error',
                    });
   }
-}
+};

@@ -1,5 +1,7 @@
 import axios from 'axios'
 import { parameterStore } from './parameterStore'
+import { serverlessTwitchUserAuth } from './serverlessTwitchUserAuth'
+import config from '../config'
 
 interface TwitchUserOAuthResponse {
   access_token: string
@@ -36,14 +38,25 @@ class TwitchUserOAuthService {
    * Generate the authorization URL for user login
    */
   async getAuthorizationUrl(): Promise<string> {
-    const credentials = await parameterStore.getTwitchCredentials()
+    let clientId: string
     
-    if (!credentials.clientId) {
-      throw new Error('Client ID not found in Parameter Store')
+    // Use serverless mode in production, Parameter Store in development
+    if (config.development.useServerlessMode) {
+      const credentials = await serverlessTwitchUserAuth.getClientId()
+      if (!credentials?.client_id) {
+        throw new Error('Client ID not found in serverless function')
+      }
+      clientId = credentials.client_id
+    } else {
+      const credentials = await parameterStore.getTwitchCredentials()
+      if (!credentials.clientId) {
+        throw new Error('Client ID not found in Parameter Store')
+      }
+      clientId = credentials.clientId
     }
 
     const params = new URLSearchParams({
-      client_id: credentials.clientId,
+      client_id: clientId,
       redirect_uri: this.redirectUri,
       response_type: 'code',
       scope: this.scopes.join(' '),
@@ -54,7 +67,7 @@ class TwitchUserOAuthService {
     
     // Log authorization details for debugging
     console.log('🔗 Generating Twitch Authorization URL:', {
-      clientId: credentials.clientId,
+      clientId: clientId,
       redirectUri: this.redirectUri,
       scopes: this.scopes,
       authUrl: authUrl,
@@ -69,25 +82,32 @@ class TwitchUserOAuthService {
    */
   async exchangeCodeForToken(code: string): Promise<TwitchUserOAuthResponse | null> {
     try {
-      const credentials = await parameterStore.getTwitchCredentials()
-      
-      if (!credentials.clientId || !credentials.clientSecret) {
-        throw new Error('Missing credentials in Parameter Store')
-      }
-
-      const response = await axios.post(`${this.baseUrl}/token`, {
-        client_id: credentials.clientId,
-        client_secret: credentials.clientSecret,
-        code: code,
-        grant_type: 'authorization_code',
-        redirect_uri: this.redirectUri
-      }, {
-        headers: {
-          'Content-Type': 'application/json'
+      // Use serverless mode in production, Parameter Store in development
+      if (config.development.useServerlessMode) {
+        const tokenData = await serverlessTwitchUserAuth.exchangeCodeForToken(code, this.redirectUri)
+        return tokenData
+      } else {
+        // Development mode - use Parameter Store
+        const credentials = await parameterStore.getTwitchCredentials()
+        
+        if (!credentials.clientId || !credentials.clientSecret) {
+          throw new Error('Missing credentials in Parameter Store')
         }
-      })
 
-      return response.data
+        const response = await axios.post(`${this.baseUrl}/token`, {
+          client_id: credentials.clientId,
+          client_secret: credentials.clientSecret,
+          code: code,
+          grant_type: 'authorization_code',
+          redirect_uri: this.redirectUri
+        }, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+
+        return response.data
+      }
     } catch (error) {
       console.error('Failed to exchange code for token:', error)
       return null
@@ -99,24 +119,31 @@ class TwitchUserOAuthService {
    */
   async refreshUserToken(refreshToken: string): Promise<TwitchUserOAuthResponse | null> {
     try {
-      const credentials = await parameterStore.getTwitchCredentials()
-      
-      if (!credentials.clientId || !credentials.clientSecret) {
-        throw new Error('Missing credentials in Parameter Store')
-      }
-
-      const response = await axios.post(`${this.baseUrl}/token`, {
-        client_id: credentials.clientId,
-        client_secret: credentials.clientSecret,
-        refresh_token: refreshToken,
-        grant_type: 'refresh_token'
-      }, {
-        headers: {
-          'Content-Type': 'application/json'
+      // Use serverless mode in production, Parameter Store in development
+      if (config.development.useServerlessMode) {
+        const tokenData = await serverlessTwitchUserAuth.refreshUserToken(refreshToken)
+        return tokenData
+      } else {
+        // Development mode - use Parameter Store
+        const credentials = await parameterStore.getTwitchCredentials()
+        
+        if (!credentials.clientId || !credentials.clientSecret) {
+          throw new Error('Missing credentials in Parameter Store')
         }
-      })
 
-      return response.data
+        const response = await axios.post(`${this.baseUrl}/token`, {
+          client_id: credentials.clientId,
+          client_secret: credentials.clientSecret,
+          refresh_token: refreshToken,
+          grant_type: 'refresh_token'
+        }, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+
+        return response.data
+      }
     } catch (error) {
       console.error('Failed to refresh token:', error)
       return null
